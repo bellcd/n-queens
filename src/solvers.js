@@ -26,7 +26,14 @@ window.findNRooksSolution = function(n) {
     solution.togglePiece(i, i); //
   }
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+
+  // the below code works, but feels hacky ...
+  var result = [];
+  // iterate through solution.attributes, building a matrix from the arrays there
+  for (let i = 0; i < n; i++) {
+    result.push(solution.attributes[i]);
+  }
+  return result;
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
