@@ -215,14 +215,115 @@ window.countNRooksSolutions = function(n) {
 window.findNQueensSolution = function(n) {
   var solution = undefined; //fixme
 
+  var solution = new Board({n: n}); //[]
+
+  // generate each possible subarray placement for the given n
+  var placement = new Array(n);
+  for (let i = 0; i < n; i++){
+    placement[i] = new Array(n);
+    placement[i].fill(0);
+    placement[i][i] = 1;
+  }
+
+  // iterate 0 through n, twice
+    // once ascending
+      // iterate n times to build a matrix
+        // starting at index 0, place each subarray row, skipping every other placement index
+        // when we get to greater than n, start from the beggining again, place the subarrays that we skipped
+    // once descending
+      // iterate n times to build a matrix
+        // do the same thing, but having the first row in the matrix start with the last subarray in placement
+
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
 
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
+  var counter = 0;
+  // generate each possible subarray placement for the given n
+  var placement = new Array(n);
+  for (let i = 0; i < n; i++){
+    placement[i] = new Array(n);
+    placement[i].fill(0);
+    placement[i][i] = 1;
+  }
+
+    // edge case
+    if (n === 1 || n === 0) {
+      return 1;
+    }
+
+  let layout;
+  let rep;
+  let stopIndex;
+  let iCopy;
+  let i = 0;
+
+  // continues looping until we've looked at every permutation of the rows
+  while (true) {
+    rep = [];
+    // copy i
+    iCopy = i;
+      // map iCopy into an array of placement indexes called rep
+      // convert iCopy into a string
+      iCopy = String(iCopy);
+      // while iCopy length is greater than 0
+      while (iCopy.length > 0) {
+        // take the last letter in iCopy, change it to a number, and unshift it onto rep
+        rep.unshift(Number(iCopy.charAt(iCopy.length - 1)));
+        // remove that letter from iCopy
+        iCopy = iCopy.slice(0, -1);
+      }
+
+      // fill empty rep indexes with 0s if necessary
+      // while rep length is less than n
+      while (rep.length < n) {
+        // unshift 0s onto rep
+        rep.unshift(0);
+      }
+
+    let flag = true;
+    let j = rep.length - 1;
+    // convert any rep indexes that equal n to appropriate index values. If they're all equal to n, we've looked at every possible permutation, so we can return counter.
+    while (flag) {
+        // check if index is equal n
+        if (rep[j] === n) {
+          // yes,
+            // if first index, we've looked at every permutation, return counter
+            if (j === 0) {
+              console.log('Number of solutions for ' + n + ' queens:', counter);
+              return counter;
+            }
+            // replace that index with 0, increment the index before it
+            rep[j] = 0;
+            rep[j - 1]++;
+        } else {
+          // no,
+          // move on
+        }
+      // decrement index
+      if (j === 0) {
+        flag = false;
+      }
+      --j;
+    }
+
+    // creates a board instance and fills with the appropriate rows
+    layout = new Board({'n': n});
+    rep.forEach((row, i) => {
+      // push placement[value at rep index] into layout
+      layout.set(i, placement[row]);
+    });
+
+    // test layout, increment counter if necessary
+    if (!layout.hasAnyQueensConflicts()) {
+      ++counter;
+    }
+
+    // make the next iteration of i the rep array, joined
+    i = Number(rep.join(''));
+    ++i;
+  }
 };
