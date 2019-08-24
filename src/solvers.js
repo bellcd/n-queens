@@ -30,28 +30,6 @@ window.findNRooksSolution = function(n) {
   }
   return result;
 };
-
-  //   legoBlock = placement[iterate through 0-4]
-  // while (indexOfTest < n) {
-  //   recurFxn(indexOfTest, legoBlock){
-  //     testArray[indexofTest] = legoBlock;
-  //     recurFxn(indexOfTest+1, legoBlock) --- when indexOfTest is at the end[0000] - increment legoblock// reset layout
-  //   }
-  //   - [] - (1) [placement[i]] - (2)[0,0] (3) - stop and call function
-  //   [0, 0, 0, 0]
-  //   [0, 0, 0, 1]
-  //   counter1: indexOfTest
-  //   counter2: which block
-  // }
-
-  // 34
-  // '34' - i
-  // [, , '3', '4']
-  // [0, 0, '3', '4']
-  // [0, 0, 3, 4]
-  // [0, 0, 4, 0]
-  // [0, 1, 0, 0]
-
   // 0034
   // 0100
   // 0- 0000
@@ -76,160 +54,128 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  // var solutionCount = new Board({n: n}); ; //fixme
-  // var recurFxn = function(row) {
-  //   // recursive solution on hold for now
-  //   //if we put rook here - call function to test
-  //     //if function is true, put it here
-  //       //recurFxn(row+1)
+
+  // // edge case
+  // if (n === 1) {
+  //   return 1;
   // }
 
-  // edge case
-  if (n === 1) {
-    return 1;
-  }
+  // var counter = 0;
+  // // generate each possible subarray placement for the given n
+  // var placement = new Array(n);
+  // for (let i = 0; i < n; i++){
+  //   placement[i] = new Array(n);
+  //   placement[i].fill(0);
+  //   placement[i][i] = 1;
+  // }
 
-  var counter = 0;
-  // generate each possible subarray placement for the given n
-  var placement = new Array(n);
-  for (let i = 0; i < n; i++){
-    placement[i] = new Array(n);
-    placement[i].fill(0);
-    placement[i][i] = 1;
-  }
+  // let layout;
+  // let rep;
+  // let stopIndex;
+  // let iCopy;
+  // let i = 0;
 
-  let layout;
-  let rep;
-  let stopIndex;
-  let iCopy;
-  let i = 0;
+  // // continues looping until we've looked at every permutation of the rows
+  // while (true) {
+  //   rep = [];
+  //   // copy i
+  //   iCopy = i;
+  //     // map iCopy into an array of placement indexes called rep
+  //     // convert iCopy into a string
+  //     iCopy = String(iCopy);
+  //     // while iCopy length is greater than 0
+  //     while (iCopy.length > 0) {
+  //       // take the last letter in iCopy, change it to a number, and unshift it onto rep
+  //       rep.unshift(Number(iCopy.charAt(iCopy.length - 1)));
+  //       // remove that letter from iCopy
+  //       iCopy = iCopy.slice(0, -1);
+  //     }
 
-  // continues looping until we've looked at every permutation of the rows
-  while (true) {
-    rep = [];
-    // copy i
-    iCopy = i;
-      // map iCopy into an array of placement indexes called rep
-      // convert iCopy into a string
-      iCopy = String(iCopy);
-      // while iCopy length is greater than 0
-      while (iCopy.length > 0) {
-        // take the last letter in iCopy, change it to a number, and unshift it onto rep
-        rep.unshift(Number(iCopy.charAt(iCopy.length - 1)));
-        // remove that letter from iCopy
-        iCopy = iCopy.slice(0, -1);
+  //     // fill empty rep indexes with 0s if necessary
+  //     // while rep length is less than n
+  //     while (rep.length < n) {
+  //       // unshift 0s onto rep
+  //       rep.unshift(0);
+  //     }
+
+  //   let flag = true;
+  //   let j = rep.length - 1;
+  //   // convert any rep indexes that equal n to appropriate index values. If they're all equal to n, we've looked at every possible permutation, so we can return counter.
+  //   while (flag) {
+  //       // check if index is equal n
+  //       if (rep[j] === n) {
+  //         // yes,
+  //           // if first index, we've looked at every permutation, return counter
+  //           if (j === 0) {
+  //             return counter;
+  //           }
+  //           // replace that index with 0, increment the index before it
+  //           rep[j] = 0;
+  //           rep[j - 1]++;
+  //       } else {
+  //         // no,
+  //         // move on
+  //       }
+  //     // decrement index
+  //     if (j === 0) {
+  //       flag = false;
+  //     }
+  //     --j;
+  //   }
+
+  //   // creates a board instance and fills with the appropriate rows
+  //   layout = new Board({'n': n});
+
+  //   for (let i = 0; i < n; i++) {
+  //     layout.set(i, placement[rep[i]]);
+
+  //     // stop adding lego blocks to matrix if there's already a conflict
+  //     if (layout.hasAnyRooksConflicts()) {
+  //       break;
+  //     }
+
+  //     // when matrix is built, test layout, increment counter if necessary
+  //     if (i === (n - 1) && !layout.hasAnyRooksConflicts()) {
+  //       ++counter;
+  //     }
+  //   }
+
+  //   // make the next iteration of i the rep array, joined
+  //   i = Number(rep.join(''));
+  //   ++i;
+  // }
+
+
+  // RECURSIVE SOLUTION
+  var layout = new Board({'n': n});
+  var sum = 0;
+  var recurFxn = function(index, tabooPositions = []){
+    debugger;
+    if (index >= n) {
+      if (!layout.hasAnyRooksConflicts()) {
+        sum++;
       }
-
-      // fill empty rep indexes with 0s if necessary
-      // while rep length is less than n
-      while (rep.length < n) {
-        // unshift 0s onto rep
-        rep.unshift(0);
-      }
-
-    let flag = true;
-    let j = rep.length - 1;
-    // convert any rep indexes that equal n to appropriate index values. If they're all equal to n, we've looked at every possible permutation, so we can return counter.
-    while (flag) {
-        // check if index is equal n
-        if (rep[j] === n) {
-          // yes,
-            // if first index, we've looked at every permutation, return counter
-            if (j === 0) {
-              return counter;
-            }
-            // replace that index with 0, increment the index before it
-            rep[j] = 0;
-            rep[j - 1]++;
-        } else {
-          // no,
-          // move on
-        }
-      // decrement index
-      if (j === 0) {
-        flag = false;
-      }
-      --j;
+      return;
     }
-
-    // creates a board instance and fills with the appropriate rows
-    layout = new Board({'n': n});
-    // rep.forEach((row, i) => {
-    //   // push placement[value at rep index] into layout
-    //   if (layout.set(i, placement[row].hasAnyRooksConflicts){
-    //     dont do it
-    //   } else { do it}
-
-
-    //   // test layout, increment counter if necessary
-    //   if (!layout.hasAnyRooksConflicts()) {
-    //     ++counter;
-    //   }
-    // });
-
-    for (let i = 0; i < n; i++) {
-      layout.set(i, placement[rep[i]]);
-
-      // stop adding lego blocks to matrix if there's already a conflict
-      if (layout.hasAnyRooksConflicts()) {
-        break;
-      }
-
-      // when matrix is built, test layout, increment counter if necessary
-      if (i === (n - 1) && !layout.hasAnyRooksConflicts()) {
-        ++counter;
-      }
+    let i = 0;
+    while(i < n) {
+      //tabooPosition[0] --- column + columns (add new columns)
+      //tabooPosition[1] -- diagonals (+1, -1)
+      // check if i exists in tabooPositions
+        // yes, i++ , continue to next while iteration
+        layout.togglePiece(index, i);
+        i++;
+        recurFxn(index+1, [0]);
+        layout.togglePiece(index, i-1);
     }
-
-
-
-    // make the next iteration of i the rep array, joined
-    i = Number(rep.join(''));
-    ++i;
   }
-//   // - [0000] [1111] [2222] [3333]
-//   // - [0, 0, 0, 0] [0001] [0002] [0003]
-//   // -   0     0001   0002         0011
-
-//   // iterate through var rep = numeric representation of subarrays
-//     // push subarrays together
-//     // decide if current rep has a conflict
-//       // if no, increment counter
-//     // increment rep by 1
-//       // split rep into array
-//         // while any indexes are greater than n
-//           // find last index greater than n
-//             // if the increment before that is negative, return counter
-//               // else, increment the index before that, set that index to 1
-
-//   // 0: [1000] 1[0,1,0,0] 2[0010] 3[0001]
-//   // - 0000, ... 1112, 1113, 1114, 1121, 1122, 1123, 1124, -
-//   //                                       5111
-//   // 1111:
-//   // [0001]
-//   // [0001]
-//   // [0001]
-//   // [0001]
-
-//   // 1112:
-//   // [0001]
-//   // [0001]
-//   // [0001]
-//   // [0010]
-
-//   //   }
-//   //     col++;
-//   //     if(col < n) return;
-//   //   }
-
-//   //   result.forEach((rowArray)
-//   //     //for
-//   //       //for
-//   //         //for
-//   //         // check if conflict - call function hasAnyRooksConflicts();
-//   //   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-//   //   return solutionCount;
+  recurFxn(0);
+return sum;
 };
+
+[[1, 0, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0], [0, 0, 0, 1]]
+//-- 0(i),  1 (i+1, i-1)
+// [0, 2], update diagonal
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
@@ -332,14 +278,19 @@ window.countNQueensSolutions = function(n) {
 
     // creates a board instance and fills with the appropriate rows
     layout = new Board({'n': n});
-    rep.forEach((row, i) => {
-      // push placement[value at rep index] into layout
-      layout.set(i, placement[row]);
-    });
 
-    // test layout, increment counter if necessary
-    if (!layout.hasAnyQueensConflicts()) {
-      ++counter;
+    for (let i = 0; i < n; i++) {
+      layout.set(i, placement[rep[i]]);
+
+      // stop adding lego blocks to matrix if there's already a conflict
+      if (layout.hasAnyQueensConflicts()) {
+        break;
+      }
+
+      // when matrix is built, test layout, increment counter if necessary
+      if (i === (n - 1) && !layout.hasAnyQueensConflicts()) {
+        ++counter;
+      }
     }
 
     // make the next iteration of i the rep array, joined
