@@ -73,6 +73,7 @@ window.findNRooksSolution = function(n) {
   // (16) 40- 0040
   // 16- 0100
 
+
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   // var solutionCount = new Board({n: n}); ; //fixme
@@ -153,15 +154,34 @@ window.countNRooksSolutions = function(n) {
 
     // creates a board instance and fills with the appropriate rows
     layout = new Board({'n': n});
-    rep.forEach((row, i) => {
-      // push placement[value at rep index] into layout
-      layout.set(i, placement[row]);
-    });
+    // rep.forEach((row, i) => {
+    //   // push placement[value at rep index] into layout
+    //   if (layout.set(i, placement[row].hasAnyRooksConflicts){
+    //     dont do it
+    //   } else { do it}
 
-    // test layout, increment counter if necessary
-    if (!layout.hasAnyRooksConflicts()) {
-      ++counter;
+
+    //   // test layout, increment counter if necessary
+    //   if (!layout.hasAnyRooksConflicts()) {
+    //     ++counter;
+    //   }
+    // });
+
+    for (let i = 0; i < n; i++) {
+      layout.set(i, placement[rep[i]]);
+
+      // stop adding lego blocks to matrix if there's already a conflict
+      if (layout.hasAnyRooksConflicts()) {
+        break;
+      }
+
+      // when matrix is built, test layout, increment counter if necessary
+      if (i === (n - 1) && !layout.hasAnyRooksConflicts()) {
+        ++counter;
+      }
     }
+
+
 
     // make the next iteration of i the rep array, joined
     i = Number(rep.join(''));

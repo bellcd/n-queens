@@ -94,6 +94,8 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function () {
+      // for (let i = 0; i < this.attributes.length; i++) {
+
       for (let i = 0; i < this.get('n'); i++) {
         if (this.hasRowConflictAt.call(this, i) === true) {
           return true;
@@ -123,6 +125,8 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function () {
+      // for (let i = 0; i < this.attributes.length; i++) {
+
       for (let i = 0; i < this.get('n'); i++) {
         if (this.hasColConflictAt.call(this, i) === true) {
           return true;
