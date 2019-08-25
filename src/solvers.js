@@ -42,9 +42,7 @@ window.countNRooksSolutions = function(n) {
   // tabooPositions is a collection of indexes on the next row (index + 1) that will generate conflicts
   var recurFxn = function(index, tabooPositions){
     if (index >= n) {
-      if (!layout.hasAnyRooksConflicts()) {
-        sum++;
-      }
+      sum++;
       return;
     }
 
@@ -115,18 +113,13 @@ window.findNQueensSolution = function(n) {
   // tabooPositions is a collection of indexes on the next row (index + 1) that will generate conflicts
   var recurFxn = function(index, tabooPositions){
     if (index >= n && !finished) {
-      if (!layout.hasAnyQueensConflicts()) {
-        // sum++;
-        finished = true;
-        // the below code works, but feels hacky ...
-        // iterate through layout, building a matrix from the arrays there
-        for (let i = 0; i < n; i++) {
-          result.push(layout.get(i).slice());
-        }
-        return;
-      } else {
-        return;
+      finished = true;
+      // the below code works, but feels hacky ...
+      // iterate through layout, building a matrix from the arrays there
+      for (let i = 0; i < n; i++) {
+        result.push(layout.get(i).slice());
       }
+      return;
     }
 
     // the index position in the row we're currently looking through
@@ -212,9 +205,7 @@ window.countNQueensSolutions = function(n) {
   // tabooPositions is a collection of indexes on the next row (index + 1) that will generate conflicts
   var recurFxn = function(index, tabooPositions){
     if (index >= n) {
-      if (!layout.hasAnyQueensConflicts()) {
-        sum++;
-      }
+      sum++;
       return;
     }
 
