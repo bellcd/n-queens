@@ -30,152 +30,172 @@ window.findNRooksSolution = function(n) {
   }
   return result;
 };
-  // 0034
-  // 0100
-  // 0- 0000
-  // 1- 0001
-  // 2- 0002
-  // 3- 0003
-  // (4) 10- 0010
-  // (5) 11- 0011
-  // (6) 12- 0012
-  // (7) 13- 0013
-  // (8) 20- 0020
-  // (9) 21- 0021
-  // (10) 22- 0022
-  // (11) 23- 0023 0024 0030
-  // (12) 30- 0030
-  // (13) 31- 0031
-  // (14) 32- 0032
-  // (15) 33- 0033 0034 0040
-  // (16) 40- 0040
-  // 16- 0100
-
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
+// window.countNRooksSolutions = function(n) {
+//   // NAIVE SOLUTION
+//   // edge case
+//   if (n === 1) {
+//     return 1;
+//   }
+
+//   var counter = 0;
+//   // generate each possible subarray placement for the given n
+//   var placement = new Array(n);
+//   for (let i = 0; i < n; i++){
+//     placement[i] = new Array(n);
+//     placement[i].fill(0);
+//     placement[i][i] = 1;
+//   }
+
+//   let layout;
+//   let rep;
+//   let stopIndex;
+//   let iCopy;
+//   let i = 0;
+
+//   // continues looping until we've looked at every permutation of the rows
+//   while (true) {
+//     rep = [];
+//     // copy i
+//     iCopy = i;
+//       // map iCopy into an array of placement indexes called rep
+//       // convert iCopy into a string
+//       iCopy = String(iCopy);
+//       // while iCopy length is greater than 0
+//       while (iCopy.length > 0) {
+//         // take the last letter in iCopy, change it to a number, and unshift it onto rep
+//         rep.unshift(Number(iCopy.charAt(iCopy.length - 1)));
+//         // remove that letter from iCopy
+//         iCopy = iCopy.slice(0, -1);
+//       }
+
+//       // fill empty rep indexes with 0s if necessary
+//       // while rep length is less than n
+//       while (rep.length < n) {
+//         // unshift 0s onto rep
+//         rep.unshift(0);
+//       }
+
+//     let flag = true;
+//     let j = rep.length - 1;
+//     // convert any rep indexes that equal n to appropriate index values. If they're all equal to n, we've looked at every possible permutation, so we can return counter.
+//     while (flag) {
+//         // check if index is equal n
+//         if (rep[j] === n) {
+//           // yes,
+//             // if first index, we've looked at every permutation, return counter
+//             if (j === 0) {
+//               return counter;
+//             }
+//             // replace that index with 0, increment the index before it
+//             rep[j] = 0;
+//             rep[j - 1]++;
+//         } else {
+//           // no,
+//           // move on
+//         }
+//       // decrement index
+//       if (j === 0) {
+//         flag = false;
+//       }
+//       --j;
+//     }
+
+//     // creates a board instance and fills with the appropriate rows
+//     layout = new Board({'n': n});
+
+//     for (let i = 0; i < n; i++) {
+//       layout.set(i, placement[rep[i]]);
+
+//       // stop adding lego blocks to matrix if there's already a conflict
+//       if (layout.hasAnyRooksConflicts()) {
+//         break;
+//       }
+
+//       // when matrix is built, test layout, increment counter if necessary
+//       if (i === (n - 1) && !layout.hasAnyRooksConflicts()) {
+//         ++counter;
+//       }
+//     }
+
+//     // make the next iteration of i the rep array, joined
+//     i = Number(rep.join(''));
+//     ++i;
+//   }
+// };
+
 window.countNRooksSolutions = function(n) {
-
-  // // edge case
-  // if (n === 1) {
-  //   return 1;
-  // }
-
-  // var counter = 0;
-  // // generate each possible subarray placement for the given n
-  // var placement = new Array(n);
-  // for (let i = 0; i < n; i++){
-  //   placement[i] = new Array(n);
-  //   placement[i].fill(0);
-  //   placement[i][i] = 1;
-  // }
-
-  // let layout;
-  // let rep;
-  // let stopIndex;
-  // let iCopy;
-  // let i = 0;
-
-  // // continues looping until we've looked at every permutation of the rows
-  // while (true) {
-  //   rep = [];
-  //   // copy i
-  //   iCopy = i;
-  //     // map iCopy into an array of placement indexes called rep
-  //     // convert iCopy into a string
-  //     iCopy = String(iCopy);
-  //     // while iCopy length is greater than 0
-  //     while (iCopy.length > 0) {
-  //       // take the last letter in iCopy, change it to a number, and unshift it onto rep
-  //       rep.unshift(Number(iCopy.charAt(iCopy.length - 1)));
-  //       // remove that letter from iCopy
-  //       iCopy = iCopy.slice(0, -1);
-  //     }
-
-  //     // fill empty rep indexes with 0s if necessary
-  //     // while rep length is less than n
-  //     while (rep.length < n) {
-  //       // unshift 0s onto rep
-  //       rep.unshift(0);
-  //     }
-
-  //   let flag = true;
-  //   let j = rep.length - 1;
-  //   // convert any rep indexes that equal n to appropriate index values. If they're all equal to n, we've looked at every possible permutation, so we can return counter.
-  //   while (flag) {
-  //       // check if index is equal n
-  //       if (rep[j] === n) {
-  //         // yes,
-  //           // if first index, we've looked at every permutation, return counter
-  //           if (j === 0) {
-  //             return counter;
-  //           }
-  //           // replace that index with 0, increment the index before it
-  //           rep[j] = 0;
-  //           rep[j - 1]++;
-  //       } else {
-  //         // no,
-  //         // move on
-  //       }
-  //     // decrement index
-  //     if (j === 0) {
-  //       flag = false;
-  //     }
-  //     --j;
-  //   }
-
-  //   // creates a board instance and fills with the appropriate rows
-  //   layout = new Board({'n': n});
-
-  //   for (let i = 0; i < n; i++) {
-  //     layout.set(i, placement[rep[i]]);
-
-  //     // stop adding lego blocks to matrix if there's already a conflict
-  //     if (layout.hasAnyRooksConflicts()) {
-  //       break;
-  //     }
-
-  //     // when matrix is built, test layout, increment counter if necessary
-  //     if (i === (n - 1) && !layout.hasAnyRooksConflicts()) {
-  //       ++counter;
-  //     }
-  //   }
-
-  //   // make the next iteration of i the rep array, joined
-  //   i = Number(rep.join(''));
-  //   ++i;
-  // }
-
-
   // RECURSIVE SOLUTION
   var layout = new Board({'n': n});
   var sum = 0;
-  var recurFxn = function(index, tabooPositions = []){
-    debugger;
+  var tabooPositions = [
+    [] // columns
+  ];
+
+  // index represents the row we're currently recursing through
+  // tabooPositions is a collection of indexes on the next row (index + 1) that will generate conflicts
+  var recurFxn = function(index, tabooPositions){
     if (index >= n) {
       if (!layout.hasAnyRooksConflicts()) {
         sum++;
       }
       return;
     }
+
+    // the index position in the row we're currently looking through
     let i = 0;
-    while(i < n) {
-      //tabooPosition[0] --- column + columns (add new columns)
-      //tabooPosition[1] -- diagonals (+1, -1)
-      // check if i exists in tabooPositions
-        // yes, i++ , continue to next while iteration
-        layout.togglePiece(index, i);
-        i++;
-        recurFxn(index+1, [0]);
-        layout.togglePiece(index, i-1);
+
+    // iterate through the columns of the current row
+    while (i < n) {
+        // check if i exists in tabooPositions, and set flag
+        var findsBadPosition = false;
+        findsBadPosition = tabooPositions.some(taboo => {
+          return taboo.some(badPosition => {
+            return badPosition === i;
+          })
+        });
+
+        if (findsBadPosition) {
+          // next while loop iteration (ie, try the next column in the current row)
+
+          i++;
+        } else {
+          // we've found a position that works for this row, so move to the next row (ie, next recursive call)
+
+          // toggle the game piece for this row
+          layout.togglePiece(index, i);
+
+          // add the taboo positions for the row we're about to recurse into
+          tabooPositions[0].push(i); // columns
+
+          // // increment previous rows right diagonals by 1 to the right
+          // tabooPositions[1] = tabooPositions[1].map(e => ++e);
+          // tabooPositions[1].push(i + 1); // diagonal to the right
+
+          // // increment previous rows left diagonals by 1 to the left
+          // tabooPositions[2] = tabooPositions[2].map(e => --e);
+          // tabooPositions[2].push(i - 1); // diagonal to the left
+          i++;
+
+          // recurse to the next row
+          recurFxn(index+1, tabooPositions);
+
+          // AFTER that recursion, toggle the piece back to 0
+          layout.togglePiece(index, i-1);
+
+          // remove each of the piece we just toggled off's taboo positions
+          tabooPositions.forEach(taboo => taboo.pop());
+
+          // // decrement the right and increment the left diagonals from tabooPositions[1] & tabooPositions[2]
+          // tabooPositions[1] = tabooPositions[1].map(e => --e);
+          // tabooPositions[2] = tabooPositions[2].map(e => ++e);
+        }
     }
   }
-  recurFxn(0);
-return sum;
+  recurFxn(0, tabooPositions);
+  return sum;
 };
-
-[[1, 0, 0, 0], [0, 0, 1, 0], [0, 0, 0, 0], [0, 0, 0, 1]]
-//-- 0(i),  1 (i+1, i-1)
-// [0, 2], update diagonal
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
@@ -206,95 +226,82 @@ window.findNQueensSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
+  // RECURSIVE SOLUTION
 
-  var counter = 0;
-  // generate each possible subarray placement for the given n
-  var placement = new Array(n);
-  for (let i = 0; i < n; i++){
-    placement[i] = new Array(n);
-    placement[i].fill(0);
-    placement[i][i] = 1;
+  // edge case
+  if (n === 0 || n === 1) {
+    return 1;
   }
 
-    // edge case
-    if (n === 1 || n === 0) {
-      return 1;
+  var layout = new Board({'n': n});
+  var sum = 0;
+  var tabooPositions = [
+    [], // columns
+    [], // diagonals to the right
+    []  // diagonals to the left
+  ];
+
+  // index represents the row we're currently recursing through
+  // tabooPositions is a collection of indexes on the next row (index + 1) that will generate conflicts
+  var recurFxn = function(index, tabooPositions){
+    if (index >= n) {
+      if (!layout.hasAnyQueensConflicts()) {
+        sum++;
+      }
+      return;
     }
 
-  let layout;
-  let rep;
-  let stopIndex;
-  let iCopy;
-  let i = 0;
+    // the index position in the row we're currently looking through
+    let i = 0;
 
-  // continues looping until we've looked at every permutation of the rows
-  while (true) {
-    rep = [];
-    // copy i
-    iCopy = i;
-      // map iCopy into an array of placement indexes called rep
-      // convert iCopy into a string
-      iCopy = String(iCopy);
-      // while iCopy length is greater than 0
-      while (iCopy.length > 0) {
-        // take the last letter in iCopy, change it to a number, and unshift it onto rep
-        rep.unshift(Number(iCopy.charAt(iCopy.length - 1)));
-        // remove that letter from iCopy
-        iCopy = iCopy.slice(0, -1);
-      }
+    // iterate through the columns of the current row
+    while (i < n) {
+        // check if i exists in tabooPositions, and set flag
+        var findsBadPosition = false;
+        findsBadPosition = tabooPositions.some(taboo => {
+          return taboo.some(badPosition => {
+            return badPosition === i;
+          })
+        });
 
-      // fill empty rep indexes with 0s if necessary
-      // while rep length is less than n
-      while (rep.length < n) {
-        // unshift 0s onto rep
-        rep.unshift(0);
-      }
+        if (findsBadPosition) {
+          // next while loop iteration (ie, try the next column in the current row)
 
-    let flag = true;
-    let j = rep.length - 1;
-    // convert any rep indexes that equal n to appropriate index values. If they're all equal to n, we've looked at every possible permutation, so we can return counter.
-    while (flag) {
-        // check if index is equal n
-        if (rep[j] === n) {
-          // yes,
-            // if first index, we've looked at every permutation, return counter
-            if (j === 0) {
-              console.log('Number of solutions for ' + n + ' queens:', counter);
-              return counter;
-            }
-            // replace that index with 0, increment the index before it
-            rep[j] = 0;
-            rep[j - 1]++;
+          i++;
         } else {
-          // no,
-          // move on
+          // we've found a position that works for this row, so move to the next row (ie, next recursive call)
+
+          // toggle the game piece for this row
+          layout.togglePiece(index, i);
+
+          // add the taboo positions for the row we're about to recurse into
+          tabooPositions[0].push(i); // columns
+
+          // increment previous rows right diagonals by 1 to the right
+          tabooPositions[1] = tabooPositions[1].map(e => ++e);
+          tabooPositions[1].push(i + 1); // diagonal to the right
+
+          // increment previous rows left diagonals by 1 to the left
+          tabooPositions[2] = tabooPositions[2].map(e => --e);
+          tabooPositions[2].push(i - 1); // diagonal to the left
+          i++;
+
+          // recurse to the next row
+          recurFxn(index+1, tabooPositions);
+
+          // AFTER that recursion, toggle the piece back to 0
+          layout.togglePiece(index, i-1);
+
+          // remove each of the piece we just toggled off's taboo positions
+          tabooPositions.forEach(taboo => taboo.pop());
+
+          // decrement the right and increment the left diagonals from tabooPositions[1] & tabooPositions[2]
+          tabooPositions[1] = tabooPositions[1].map(e => --e);
+          tabooPositions[2] = tabooPositions[2].map(e => ++e);
         }
-      // decrement index
-      if (j === 0) {
-        flag = false;
-      }
-      --j;
-    }
-
-    // creates a board instance and fills with the appropriate rows
-    layout = new Board({'n': n});
-
-    for (let i = 0; i < n; i++) {
-      layout.set(i, placement[rep[i]]);
-
-      // stop adding lego blocks to matrix if there's already a conflict
-      if (layout.hasAnyQueensConflicts()) {
-        break;
-      }
-
-      // when matrix is built, test layout, increment counter if necessary
-      if (i === (n - 1) && !layout.hasAnyQueensConflicts()) {
-        ++counter;
       }
     }
-
-    // make the next iteration of i the rep array, joined
-    i = Number(rep.join(''));
-    ++i;
-  }
+    recurFxn(0, tabooPositions);
+    return sum;
 };
+
